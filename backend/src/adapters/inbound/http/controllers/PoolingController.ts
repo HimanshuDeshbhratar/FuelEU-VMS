@@ -18,7 +18,7 @@ export class PoolingController {
     this.createPool = new CreatePool(poolingRepository, complianceRepository);
   }
 
-  async createPool(req: Request, res: Response): Promise<void> {
+  async create(req: Request, res: Response): Promise<void> {
     try {
       const { year, shipIds } = req.body;
 

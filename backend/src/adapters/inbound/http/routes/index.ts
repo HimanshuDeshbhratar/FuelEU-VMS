@@ -35,7 +35,7 @@ export function createRoutes(
   router.get('/banking/balance', (req, res) => bankingController.getBankingBalance(req, res));
 
   // Pooling endpoints
-  router.post('/pools', (req, res) => poolingController.createPool(req, res));
+  router.post('/pools', (req, res) => poolingController.create(req, res));
   router.get('/pools/:poolId', (req, res) => poolingController.getPool(req, res));
   router.get('/pools/adjusted-cb', (req, res) => poolingController.getAdjustedCB(req, res));
 

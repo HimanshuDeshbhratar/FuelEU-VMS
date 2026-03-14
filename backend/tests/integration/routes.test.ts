@@ -26,10 +26,15 @@ describe('Routes API Integration Tests', () => {
     const routeRepository = new PrismaRouteRepository(prisma);
     const complianceRepository = new PrismaComplianceRepository(prisma);
     const bankingRepository = new PrismaBankingRepository(prisma);
-    const poolingRepository = new PrismaPoolingRepository(prisma);
-
+    // const poolingRepository = new PrismaPoolingRepository(prisma);
+    const poolingRepository = {
+      getAllAdjustedCB: jest.fn(),
+      createPool: jest.fn(),
+      getPool: jest.fn(),
+    } as any;
+    
     const routeController = new RouteController(routeRepository);
-    const complianceController = new ComplianceController(routeRepository, complianceRepository);
+    const complianceController = new ComplianceController(routeRepository, complianceRepository, poolingRepository);
     const bankingController = new BankingController(complianceRepository, bankingRepository);
     const poolingController = new PoolingController(poolingRepository, complianceRepository);
 
