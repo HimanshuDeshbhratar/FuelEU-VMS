@@ -1,0 +1,36 @@
+/**
+ * Application Entry Point
+ * Main entry point for the Fuel EU compliance backend
+ */
+
+import { startServer } from './infrastructure/server/server';
+import { logger } from './infrastructure/config/logger';
+
+async function main(): Promise<void> {
+  try {
+    logger.info('Starting Fuel EU Compliance Backend...');
+    await startServer();
+    logger.info('Server started successfully');
+  } catch (error) {
+    logger.error('Failed to start server', error);
+    process.exit(1);
+  }
+}
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+  logger.error('Uncaught Exception:', error);
+  process.exit(1);
+});
+
+// Start the application
+main();
+
+
+
