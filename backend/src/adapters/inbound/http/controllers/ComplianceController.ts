@@ -53,9 +53,16 @@ export class ComplianceController {
       }
 
       const yearNum = parseInt(year as string, 10);
-      const compliances = await this.complianceRepository.findAllByYear(yearNum);
+      const routes = await this.routeRepository.findByYear(yearNum);
 
-      res.status(200).json(compliances);
+      const results = [];
+      for (const route of routes) {
+        const cb = await this.computeComplianceBalance.execute(route.shipId, yearNum);
+        results.push(cb);
+      }
+      
+      res.status(200).json(results);
+      
     } catch (error: any) {
       res.status(400).json({ error: error.message });
     }

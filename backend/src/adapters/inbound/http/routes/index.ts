@@ -19,9 +19,10 @@ export function createRoutes(
 
   // Routes endpoints
   router.get('/routes', (req, res) => routeController.getAllRoutes(req, res));
+  router.get('/routes/comparison', (req, res) => routeController.getComparison(req, res));
   router.get('/routes/:routeId', (req, res) => routeController.getRouteById(req, res));
   router.post('/routes/:routeId/baseline', (req, res) => routeController.setBaseline(req, res));
-  router.get('/routes/comparison', (req, res) => routeController.getComparison(req, res));
+  
 
   // Compliance endpoints
   router.get('/compliance/cb', (req, res) => complianceController.getCB(req, res));
