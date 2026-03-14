@@ -1,0 +1,76 @@
+// Prisma Schema for FuelEU Maritime Compliance Platform
+// PostgreSQL database schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Routes {
+  id              Int      @id @default(autoincrement())
+  route_id        String   @unique
+  ship_id         String
+  vessel_type     String
+  fuel_type       String
+  year            Int
+  ghg_intensity   Float
+  fuel_consumption Float
+  distance        Float
+  total_emissions Float
+  is_baseline     Boolean  @default(false)
+  ShipCompliance  ShipCompliance? @relation(fields: [ship_id], references: [ship_id])
+  
+  @@index([ship_id])
+  @@index([year])
+  @@index([is_baseline])
+}
+
+model ShipCompliance {
+  id        Int     @id @default(autoincrement())
+  ship_id   String  @unique
+  year      Int
+  cb_gco2eq Float?
+  Routes    Routes[]
+  BankEntries BankEntries[]
+  PoolMembers PoolMembers[]
+  
+  @@index([year])
+}
+
+model BankEntries {
+  id             Int     @id @default(autoincrement())
+  ship_id        String
+  year           Int
+  amount_gco2eq  Float
+  ShipCompliance ShipCompliance @relation(fields: [ship_id], references: [ship_id])
+  
+  @@index([ship_id])
+  @@index([year])
+}
+
+model Pools {
+  id          Int     @id @default(autoincrement())
+  year        Int
+  created_at  DateTime @default(now())
+  PoolMembers PoolMembers[]
+  
+  @@index([year])
+}
+
+model PoolMembers {
+  id          Int     @id @default(autoincrement())
+  pool_id     Int
+  ship_id     String
+  cb_before   Float
+  cb_after    Float
+  Pools       Pools @relation(fields: [pool_id], references: [id])
+  ShipCompliance ShipCompliance @relation(fields: [ship_id], references: [ship_id])
+  
+  @@index([pool_id])
+  @@index([ship_id])
+}
+
